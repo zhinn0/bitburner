@@ -14,13 +14,16 @@ function getCorpData(ns) {
 
 function employeeBoost(ns) {
   let perfMult = 0.997 //simplified, assumes no interns
-  let partyCostperEmp = 500000*(Math.sqrt((thisOffice.avgMorale*perfMult-10)**2+40*thisOffice.maxMorale)-thisOffice.avgMorale*perfMult-10)
   for (let division of ns.corporation.getCorporation().divisions) {
     for (let city of ns.corporation.getDivision(division).cities) {
-      let thisoffice = ns.corporation.getOffice(division, city)
-      let partyCostperEmp = 500000*(Math.sqrt((thisOffice.avgMorale*perfMult-10)**2+40*thisOffice.maxMorale)-thisOffice.avgMorale*perfMult-10)
-  if (thisOffice.avgEnergy<thisOffice.maxEnergy) {ns.corporation.buyTea(division,city)}
-    if (thisOffice.avgMorale<thisOffice.maxMorale) {ns.corporation.throwParty(division,city,partyCostperEmp*thisOffice.numEmployees)}
+      let thisOffice = ns.corporation.getOffice(division, city)
+      let partyCostperEmp = 500000 * (Math.sqrt((thisOffice.avgMorale * perfMult - 10) ** 2 + 40 * thisOffice.maxMorale) - thisOffice.avgMorale * perfMult - 10)
+      let partyCost = partyCostperEmp * thisOffice.numEmployees
+      if (thisOffice.avgEnergy < thisOffice.maxEnergy - 0.5) { ns.corporation.buyTea(division, city) }
+      if (thisOffice.avgMorale < thisOffice.maxMorale - 0.5) {
+        ns.corporation.throwParty(division, city, partyCost)
+        //ns.print('INFO - Paid $' + partyCost + ' to maximize employee morale')
+      }
     }
   }
 }
