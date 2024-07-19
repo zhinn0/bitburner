@@ -1,0 +1,31 @@
+/** @param {NS} ns */
+export function calculateHashGainRate(level, ramUsed, maxRam, cores, mult) { //mult is ns.getHacknetMultipliers().production
+  const baseGain = HacknetServerConstants.HashesPerLevel * level;
+  const ramMultiplier = Math.pow(1.07, Math.log2(maxRam));
+  const coreMultiplier = 1 + (cores - 1) / 5;
+  const ramRatio = 1 - ramUsed / maxRam;
+
+  return baseGain * ramMultiplier * coreMultiplier * ramRatio * mult //* currentNodeMults.HacknetNodeMoney;
+}
+
+export const HacknetServerConstants = {
+  HashesPerLevel: 0.001,
+
+  BaseCost: 50e3,
+  RamBaseCost: 200e3,
+  CoreBaseCost: 1e6,
+  CacheBaseCost: 10e6,
+
+  PurchaseMult: 3.2,
+  UpgradeLevelMult: 1.1,
+  UpgradeRamMult: 1.4,
+  UpgradeCoreMult: 1.55,
+  UpgradeCacheMult: 1.85,
+
+  MaxServers: 20,
+
+  MaxLevel: 300,
+  MaxRam: 8192,
+  MaxCores: 128,
+  MaxCache: 15,
+}
